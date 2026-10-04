@@ -128,7 +128,7 @@ export PATH=$PATH:$(go env GOPATH)/bin
 alias vim=nvim
 alias lg=lazygit
 
-alias initday="$HOME/Documents/Codes/python-scripts/automatic-notes-init/main.py"
+alias initday="$HOME/Documents/Codes/Python/python-scripts/automatic-notes-init/main.py"
 alias nd='cd "$HOME/Developer/lndata/carbon64/md-notes" && goinitday && vim'
 
 alias ldd='cd "$HOME/Developer/lndata/carbon64"'
