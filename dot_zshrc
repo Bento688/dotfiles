@@ -1,0 +1,272 @@
+# =========================================================
+# Oh My Zsh
+# =========================================================
+# source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+export ZSH="$HOME/.oh-my-zsh"
+
+# No theme — use a minimal native Zsh prompt instead.
+ZSH_THEME=""
+
+plugins=(
+  git
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  web-search
+  # vi-mode
+)
+
+source "$ZSH/oh-my-zsh.sh"
+
+
+# =========================================================
+# Prompt
+# =========================================================
+
+autoload -Uz vcs_info
+autoload -Uz add-zsh-hook
+
+FIRST_PROMPT=true
+LAST_COMMAND=""
+
+remember_command() {
+  LAST_COMMAND="$1"
+}
+
+draw_prompt() {
+  if [[ "$FIRST_PROMPT" == false && "$LAST_COMMAND" != "clear" ]]; then
+    print
+  fi
+
+  FIRST_PROMPT=false
+
+  if (( COLUMNS < 80 )); then
+    PROMPT_PATH_WIDTH=25
+    PROMPT_BRANCH_WIDTH=15
+  elif (( COLUMNS < 120 )); then
+    PROMPT_PATH_WIDTH=35
+    PROMPT_BRANCH_WIDTH=20
+  else
+    PROMPT_PATH_WIDTH=50
+    PROMPT_BRANCH_WIDTH=30
+  fi
+
+  vcs_info
+}
+
+function +vi-truncate_branch() {
+  local branch="${hook_com[branch]}"
+  local max=$PROMPT_BRANCH_WIDTH
+
+  if (( ${#branch} > max )); then
+    hook_com[branch]="${branch[1,$((max - 1))]}…"
+  fi
+}
+
+add-zsh-hook preexec remember_command
+add-zsh-hook precmd draw_prompt
+
+zstyle ':vcs_info:git:*' formats '  %F{cyan} %b%f'
+zstyle ':vcs_info:git+set-message:*' hooks truncate_branch
+
+setopt PROMPT_SUBST
+
+# PROMPT='%F{blue}%${PROMPT_PATH_WIDTH}<…<%~%<<%f${vcs_info_msg_0_}
+# ❯ '
+
+PROMPT='%F{blue}%~%f${vcs_info_msg_0_}
+❯ '
+
+# =========================================================
+# Conda
+# =========================================================
+
+__conda_setup="$('$HOME/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+
+if [ $? -eq 0 ]; then
+  eval "$__conda_setup"
+else
+  if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+    . "$HOME/miniconda3/etc/profile.d/conda.sh"
+  else
+    export PATH="$HOME/miniconda3/bin:$PATH"
+  fi
+fi
+
+unset __conda_setup
+
+
+# =========================================================
+# Google Cloud SDK
+# =========================================================
+
+if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then
+  . "$HOME/google-cloud-sdk/path.zsh.inc"
+fi
+
+if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then
+  . "$HOME/google-cloud-sdk/completion.zsh.inc"
+fi
+
+
+# =========================================================
+# PATH
+# =========================================================
+
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin"
+export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+
+# Go Environment Variables
+export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$(go env GOPATH)/bin
+
+
+# =========================================================
+# Editor / aliases
+# =========================================================
+
+alias vim=nvim
+alias lg=lazygit
+
+alias initday="$HOME/Documents/Codes/python-scripts/automatic-notes-init/main.py"
+alias nd='cd "$HOME/Developer/lndata/carbon64/md-notes" && goinitday && vim'
+
+alias ldd='cd "$HOME/Developer/lndata/carbon64"'
+alias cdc='cd $HOME/Documents/Codes'
+alias configs='cd $HOME/.config'
+
+
+# =========================================================
+# CS50
+# =========================================================
+
+export CC="clang"
+
+export CFLAGS="-ferror-limit=1 \
+-gdwarf-4 \
+-ggdb3 \
+-O0 \
+-std=c11 \
+-Wall \
+-Werror \
+-Wextra \
+-Wno-gnu-folding-constant \
+-Wno-sign-compare \
+-Wno-unused-parameter \
+-Wno-unused-variable \
+-Wno-unused-but-set-variable \
+-Wshadow"
+
+export LDLIBS="-lcrypt -lcs50 -lm"
+
+
+# =========================================================
+# Python / pip
+# =========================================================
+
+export PIP_REQUIRE_VIRTUALENV=true
+
+gpip() {
+  PIP_REQUIRE_VIRTUALENV=false pip3 "$@"
+}
+
+
+# =========================================================
+# NVM
+# =========================================================
+
+export NVM_DIR="$HOME/.nvm"
+
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \
+  . "/opt/homebrew/opt/nvm/nvm.sh"
+
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \
+  . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+
+
+# Automatically switch Node version based on .nvmrc
+autoload -U add-zsh-hook
+
+load-nvmrc() {
+  local node_version
+  local nvmrc_path
+  local nvmrc_node_version
+
+  node_version="$(nvm version)"
+  nvmrc_path="$(nvm_find_nvmrc)"
+
+  if [ -n "$nvmrc_path" ]; then
+    nvmrc_node_version="$(nvm version "$(cat "$nvmrc_path")")"
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+
+    elif [ "$nvmrc_node_version" != "$node_version" ]; then
+      nvm use
+    fi
+
+  elif [ "$node_version" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default
+  fi
+}
+
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
+
+
+# =========================================================
+# Homebrew libraries
+# =========================================================
+
+export DYLD_FALLBACK_LIBRARY_PATH="$(brew --prefix)/lib:$DYLD_FALLBACK_LIBRARY_PATH"
+
+
+# =========================================================
+# OpenCode
+# =========================================================
+
+opencode() {
+  if (( $# > 0 )); then
+    command opencode "$@"
+    return
+  fi
+
+  if [[ -f .env ]]; then
+    echo "Loading local environment variables from .env..."
+    export $(grep -v '^#' .env | xargs)
+  fi
+
+  local port=4096
+
+  while lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; do
+    ((port++))
+  done
+
+  echo "Starting OpenCode on port $port"
+
+  command opencode --port "$port"
+}
+
+alias oc=opencode
+
+# =========================================================
+# Emacs
+# =========================================================
+
+alias emacs="open -a /Applications/Emacs.app"
+
+# =========================================================
+# ZSH Vim Mode
+# =========================================================
+
+# bindkey -v
+# export KEYTIMEOUT=1
+
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+# Edit the current command line in Neovim using ZLE
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^x^e' edit-command-line
