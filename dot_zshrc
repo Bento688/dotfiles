@@ -270,3 +270,9 @@ export VISUAL="nvim"
 autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey '^x^e' edit-command-line
+
+# jenv - per-project JDK selection (added 2026-10-09)
+# Reads a .java-version file from the current directory upward.
+# The `export` plugin is what makes JAVA_HOME follow jenv, which Maven needs.
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
