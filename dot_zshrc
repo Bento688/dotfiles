@@ -129,7 +129,7 @@ alias vim=nvim
 alias lg=lazygit
 
 alias initday="$HOME/Documents/Codes/Python/python-scripts/automatic-notes-init/main.py"
-alias nd='cd "$HOME/Developer/lndata/carbon64/md-notes" && goinitday && vim'
+alias nd='cd "$HOME/Developer/lndata/md-notes/carbon64" && goinitday && vim'
 
 alias ldd='cd "$HOME/Developer/lndata/carbon64"'
 alias cdc='cd $HOME/Documents/Codes'
