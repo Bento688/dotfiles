@@ -263,8 +263,8 @@ alias emacs="open -a /Applications/Emacs.app"
 # bindkey -v
 # export KEYTIMEOUT=1
 
-export EDITOR="nvim"
-export VISUAL="nvim"
+export EDITOR="/opt/homebrew/bin/nvim"
+export VISUAL="/opt/homebrew/bin/nvim"
 
 # Edit the current command line in Neovim using ZLE
 autoload -Uz edit-command-line
