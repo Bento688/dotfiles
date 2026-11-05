@@ -1,0 +1,168 @@
+tap "anomalyco/tap"
+tap "asmvik/formulae", "https://github.com/asmvik/homebrew-formulae.git"
+tap "d12frosted/emacs-plus", trusted: true
+tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae", trusted: true
+tap "jesseduffield/lazydocker"
+tap "nikitabobko/tap"
+tap "oven-sh/bun"
+tap "phospho-app/phosphobot"
+# Manage your dotfiles across multiple diverse machines, securely
+brew "chezmoi"
+# Cross-platform make
+brew "cmake"
+# Apjanke's fork of the classic cowsay project
+brew "cowsay"
+# TIFF library and utilities
+brew "libtiff"
+# Simple, fast and user-friendly alternative to find
+brew "fd"
+# Play, record, convert, and stream select audio and video codecs
+brew "ffmpeg"
+# GNU compiler collection
+brew "gcc"
+# Interact with Google Gemini AI models from the command-line
+brew "gemini-cli"
+# Common components for zathura
+brew "girara"
+# Distributed revision control system
+brew "git"
+# Git extension for versioning large files
+brew "git-lfs"
+# Audit git repos for secrets
+brew "gitleaks"
+# Open-source GitLab command-line tool
+brew "glab"
+# Open source programming language to build simple/reliable/efficient software
+brew "go"
+# Java-based scripting language
+brew "groovy"
+# Tools and libraries to manipulate images in select formats
+brew "imagemagick"
+# Manage your Java environment
+brew "jenv"
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# Simple terminal UI for git commands
+brew "lazygit"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.14"
+# Sudoless performance monitoring for Apple Silicon processors
+brew "macmon"
+# Utility for directing compilation
+brew "make"
+# Java-based project management
+brew "maven"
+# Utility for testing the memory subsystem
+brew "memtester"
+# Fast and user friendly build system
+brew "meson"
+# Deep clean and optimize your Mac
+brew "mole"
+# Open source relational database management system
+brew "mysql-client"
+# Ambitious Vim-fork focused on extensibility and agility
+brew "neovim"
+# HTTP(S) server and reverse proxy, and IMAP/POP3 proxy server
+brew "nginx"
+# Port scanning utility for large networks
+brew "nmap"
+# Manage multiple Node.js versions
+brew "nvm"
+# Execute binaries from Python packages in isolated environments
+brew "pipx"
+# Fast, disk space efficient package manager
+brew "pnpm"
+# Object-relational database system
+brew "postgresql@17"
+# Protocol buffers (Google's data interchange format)
+brew "protobuf"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.10"
+# Ultra-fast CSV data-wrangling toolkit
+brew "qsv"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# Safe, concurrent, practical language
+brew "rust"
+# SMART hard drive monitoring
+brew "smartmontools"
+# Stress test a computer system in various selectable ways
+brew "stress-ng"
+# Terminal multiplexer
+brew "tmux"
+# Incremental parsing library
+brew "tree-sitter"
+# Extraction utility for .zip compressed archives
+brew "unzip"
+# Extremely fast Python package installer and resolver, written in Rust
+brew "uv"
+# Internet file retriever
+brew "wget"
+# Network analyzer and capture tool - without graphical user interface
+brew "wireshark"
+# Feature-rich command-line audio/video downloader
+brew "yt-dlp"
+# Better and friendly vi(vim) mode plugin for ZSH
+brew "zsh-vi-mode"
+# The AI coding agent built for the terminal.
+brew "anomalyco/tap/opencode", trusted: true
+# GNU Emacs text editor
+brew "d12frosted/emacs-plus/emacs-plus@31"
+# A window border system for macOS
+brew "felixkratz/formulae/borders"
+# A simple terminal UI for docker, written in Go
+brew "jesseduffield/lazydocker/lazydocker", trusted: true
+# Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
+brew "oven-sh/bun/bun", trusted: true
+# AeroSpace is an i3-like tiling window manager for macOS
+cask "nikitabobko/tap/aerospace", trusted: true
+# Terminal-based AI coding assistant
+cask "claude-code"
+# OpenAI's coding agent that runs in your terminal
+cask "codex"
+# App to build and share containerised applications and microservices
+cask "docker-desktop"
+# Developer platform
+cask "dotnet-sdk"
+cask "font-jetbrains-mono-nerd-font"
+# Terminal emulator that uses platform-native UI and GPU acceleration
+cask "ghostty"
+# Menu bar manager
+cask "jordanbaird-ice"
+# Customise mouse behavior
+cask "linearmouse"
+# Reverse proxy, secure introspectable tunnels to localhost
+cask "ngrok"
+# AI coding agent desktop client
+cask "opencode-desktop"
+# Modern programming language in the Lisp/Scheme family
+cask "racket"
+# MySQL/MariaDB database management
+cask "sequel-ace"
+# JDK from the Eclipse Foundation (Adoptium)
+cask "temurin@21"
+# JDK from the Eclipse Foundation (Adoptium)
+cask "temurin@25"
+# Menu bar manager
+cask "thaw"
+# Menu bar toolkit with keep-awake, system monitor and volume mixer
+cask "vorssaint"
+# Network protocol analyzer
+cask "wireshark-app"
+go "github.com/go-delve/delve/cmd/dlv"
+go "goinitday"
+go "github.com/haya14busa/goplay/cmd/goplay"
+go "golang.org/x/tools/gopls"
+go "github.com/cweill/gotests/gotests"
+go "example.com/hello"
+go "github.com/josharian/impl"
+npm "@benborla29/mcp-server-mysql"
+npm "@nestjs/cli"
+npm "corepack"
+npm "firebase-tools"
+npm "nodemon"
+npm "nvm"
+npm "pm2"
+npm "tree-sitter-cli"
+npm "ts-node"
+npm "typescript"
