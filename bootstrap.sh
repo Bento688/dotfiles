@@ -101,9 +101,27 @@ setup_tmux() {
   "$TPM_DIR/bin/install_plugins"
 }
 
-# `Lazy!` with the bang sets wait=true, so this blocks until done.
+# `Lazy!` with the bang sets wait=true, so these block until done.
+#
+# On a machine with no plugins yet, lazy clones everything at HEAD and
+# rewrites lazy-lock.json with those commits -- which would silently
+# throw away the pinned versions. So keep a copy, let it install, put
+# the pinned lockfile back, then restore to it.
 setup_nvim_plugins() {
+  local lock="$XDG_CONFIG_HOME/nvim/lazy-lock.json"
+  local keep
+  keep="$(mktemp)"
+  cp "$lock" "$keep"
+
+  nvim --headless "+Lazy! install" +qa || true
+  cp "$keep" "$lock"
   nvim --headless "+Lazy! restore" +qa
+  local rc=$?
+
+  # restore rewrites it again on the way out.
+  cp "$keep" "$lock"
+  rm -f "$keep"
+  return $rc
 }
 
 # mason.nvim detects headless mode and installs synchronously,
