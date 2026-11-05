@@ -15,6 +15,13 @@
 # Then:  bash ~/.local/share/chezmoi/bootstrap.sh
 #
 # Cask installs will prompt for your password. Safe to re-run.
+#
+# To refresh the Brewfile later, --no-go matters: without it the dump
+# writes goinitday as a bare module name that `go install` can't resolve.
+#
+#   brew bundle dump --no-vscode --no-go \
+#     --file="$XDG_CONFIG_HOME/homebrew/Brewfile" --force
+#   chezmoi re-add ~/.config/homebrew/Brewfile
 
 set -uo pipefail
 
@@ -89,6 +96,10 @@ brew_bundle() {
 }
 
 setup_node() {
+  # Installed directly rather than waiting for the Brewfile, because the
+  # Brewfile's npm entries need a working node to install at all.
+  brew list nvm >/dev/null 2>&1 || brew install nvm
+
   export NVM_DIR="$HOME/.nvm"
   mkdir -p "$NVM_DIR"
   local nvm_sh
@@ -186,11 +197,9 @@ setup_mason() {
 main() {
   preflight || exit 1
 
-  # node must exist before the Brewfile's npm entries can install,
-  # and nvm itself comes from the Brewfile — so bundle runs twice.
-  run_step "Homebrew packages"      brew_bundle
+  # Node first: the Brewfile's npm entries can't install without it.
   run_step "Node (nvm)"             setup_node
-  run_step "Homebrew npm packages"  brew_bundle
+  run_step "Homebrew packages"      brew_bundle
   run_step "Go tools"               setup_go_tools
   run_step "tmux plugins"           setup_tmux
   run_step "nvim plugins"           setup_nvim_plugins
