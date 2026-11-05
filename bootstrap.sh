@@ -33,6 +33,21 @@ BREWFILE="$XDG_CONFIG_HOME/homebrew/Brewfile"
 TPM_DIR="$XDG_CONFIG_HOME/tmux/plugins/tpm"
 MASON_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/nvim/mason/packages"
 
+# The Brewfile is dumped with --no-go, because `brew bundle dump` writes
+# goinitday as a bare module name that `go install` cannot resolve.
+# So the Go tools are listed here instead.
+GO_TOOLS=(
+  github.com/go-delve/delve/cmd/dlv
+  github.com/haya14busa/goplay/cmd/goplay
+  golang.org/x/tools/gopls
+  github.com/cweill/gotests/gotests
+  github.com/josharian/impl
+)
+
+# goinitday is a daily-driver notes script. Its go.mod declares
+# `module goinitday`, so it can only be built from a checkout.
+GOINITDAY_REPO="https://github.com/Bento688/go-notes.git"
+
 # Mason has no ensure_installed, so the package list lives here.
 # Delete this array and the mason step if you'd rather manage it in nvim.
 MASON_PACKAGES=(
@@ -90,6 +105,29 @@ setup_node() {
   fi
   nvm use default >/dev/null 2>&1 || true
   set -u
+}
+
+setup_go_tools() {
+  command -v go >/dev/null || { echo "go not found; did the brew step run?" >&2; return 1; }
+
+  local tool
+  for tool in "${GO_TOOLS[@]}"; do
+    echo "go install ${tool}@latest"
+    go install "${tool}@latest" || return 1
+  done
+
+  # Built from a checkout rather than `go install`, see GOINITDAY_REPO above.
+  local gobin tmp
+  gobin="$(go env GOPATH)/bin"
+  tmp="$(mktemp -d)"
+  if git clone --depth 1 "$GOINITDAY_REPO" "$tmp/go-notes"; then
+    ( cd "$tmp/go-notes" && go build -o "$gobin/goinitday" . )
+    local rc=$?
+    rm -rf "$tmp"
+    return $rc
+  fi
+  rm -rf "$tmp"
+  return 1
 }
 
 setup_tmux() {
@@ -153,6 +191,7 @@ main() {
   run_step "Homebrew packages"      brew_bundle
   run_step "Node (nvm)"             setup_node
   run_step "Homebrew npm packages"  brew_bundle
+  run_step "Go tools"               setup_go_tools
   run_step "tmux plugins"           setup_tmux
   run_step "nvim plugins"           setup_nvim_plugins
   run_step "nvim LSP/DAP/formatters" setup_mason
