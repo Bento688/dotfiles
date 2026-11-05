@@ -118,8 +118,13 @@ setup_nvim_plugins() {
   nvim --headless "+Lazy! restore" +qa
   local rc=$?
 
-  # restore rewrites it again on the way out.
-  cp "$keep" "$lock"
+  # A successful restore leaves the lockfile alone. If it didn't, the
+  # pins weren't applied -- say so instead of quietly papering over it.
+  if ! cmp -s "$keep" "$lock"; then
+    echo "warning: restore rewrote lazy-lock.json; plugin pins not applied" >&2
+    cp "$keep" "$lock"
+    rc=1
+  fi
   rm -f "$keep"
   return $rc
 }
