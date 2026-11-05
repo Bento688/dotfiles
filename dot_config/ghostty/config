@@ -1,0 +1,70 @@
+# === THEME & UI ===
+window-padding-y = 10
+window-padding-x = 5
+# theme = Gruvbox Material Dark
+# theme = Catppuccin Mocha
+# theme = Rose Pine Moon
+# theme = Kanagawa Dragon
+# theme = Kanso Mist
+# theme = Spacegray Bright
+# theme = Miasma
+theme = Everforest Dark Hard
+
+# === MACOS UI ===
+# # Completely hides the native grey macOS title bar
+window-decoration = none
+window-padding-color = extend
+
+background-opacity = 0.97
+
+mouse-hide-while-typing = true
+
+# === FONT ENGINE ===
+# font-family = "MesloLGSDZ Nerd Font Mono"
+font-family = "JetBrainsMono Nerd Font Mono"
+# font-style = SemiBold
+# font-style = Medium
+font-thicken = true
+font-size = 18
+
+# disable ligatures
+font-feature = -dlig
+font-feature = -calt
+font-feature = -liga
+
+# === CURSOR ENGINE ===
+cursor-style = block
+
+# Optional: Set to 'false' if you want a solid, non-blinking block like classic Vim
+cursor-style-blink = true 
+
+# Ensures text beneath the block cursor inverses color so you can actually read it
+cursor-invert-fg-bg = true
+
+# Tell Ghostty's automatic zsh integration to stop hijacking the cursor shape
+shell-integration-features = no-cursor
+
+# === WINDOW MANAGEMENT (Splits) ===
+# Create splits
+keybind = cmd+shift+d=new_split:right
+keybind = cmd+shift+a=new_split:left
+keybind = cmd+shift+w=new_split:up
+keybind = cmd+shift+s=new_split:down
+
+# Navigate splits (Vim style)
+keybind = cmd+h=goto_split:left
+keybind = cmd+j=goto_split:bottom
+keybind = cmd+k=goto_split:top
+keybind = cmd+l=goto_split:right
+
+# Close split
+keybind = cmd+w=close_surface
+
+# Change currently focused terminal title
+keybind = cmd+shift+t=prompt_surface_title
+
+# Allow copy to clipboard from SSH
+clipboard-read = allow
+clipboard-write = allow
+copy-on-select = clipboard
+
