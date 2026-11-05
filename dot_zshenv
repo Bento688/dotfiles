@@ -1,0 +1,7 @@
+# =========================================================
+# XDG Base Directories
+# =========================================================
+# Set here rather than .zshrc so non-interactive shells (scripts,
+# zsh -c) also see it. Homebrew's trust store lives at
+# $XDG_CONFIG_HOME/homebrew/trust.json and is lost without it.
+export XDG_CONFIG_HOME="$HOME/.config"
