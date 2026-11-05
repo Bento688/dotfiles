@@ -265,6 +265,7 @@ alias emacs="open -a /Applications/Emacs.app"
 
 export EDITOR="/opt/homebrew/bin/nvim"
 export VISUAL="/opt/homebrew/bin/nvim"
+export MANPAGER="nvim --clean +Man!"
 
 # Edit the current command line in Neovim using ZLE
 autoload -Uz edit-command-line
