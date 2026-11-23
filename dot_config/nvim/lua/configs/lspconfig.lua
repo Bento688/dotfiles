@@ -74,7 +74,8 @@ vim.lsp.enable {
   "marksman",
   "yamlls",
   "gitlab_ci_ls",
-  "csharp_ls"
+  "csharp_ls",
+  "bashls"
 }
 
 vim.diagnostic.config { severity_sort = true }
