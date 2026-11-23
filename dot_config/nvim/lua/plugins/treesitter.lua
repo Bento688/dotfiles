@@ -8,7 +8,6 @@ return {
 
   {
     "nvim-treesitter/nvim-treesitter",
-    branch = "master",
     opts = {
       ensure_installed = {
         -- Neovim core (Never remove these)
@@ -36,16 +35,6 @@ return {
         "yaml",
         "bash",
         "markdown",
-      },
-
-      indent = {
-        enable = true,
-        disable = {
-          "javascript",
-          "typescript",
-          "tsx",
-          "html",
-        },
       },
     },
   },
