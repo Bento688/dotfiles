@@ -200,7 +200,13 @@
                         "product_id": 12292,
                         "vendor_id": 14000
                     },
-                    "ignore": false
+                    "ignore": false,
+                    "simple_modifications": [
+                        {
+                            "from": { "key_code": "home" },
+                            "to": [{ "apple_vendor_top_case_key_code": "keyboard_fn" }]
+                        }
+                    ]
                 },
                 {
                     "identifiers": {
@@ -242,6 +248,21 @@
                     },
                     "ignore": false,
                     "ignore_vendor_events": true
+                },
+                {
+                    "identifiers": {
+                        "device_address": "c8-08-20-d1-6e-5e",
+                        "is_keyboard": true,
+                        "is_pointing_device": true
+                    },
+                    "ignore": false,
+                    "ignore_vendor_events": true,
+                    "simple_modifications": [
+                        {
+                            "from": { "key_code": "delete_forward" },
+                            "to": [{ "apple_vendor_top_case_key_code": "keyboard_fn" }]
+                        }
+                    ]
                 }
             ],
             "name": "Default profile",
