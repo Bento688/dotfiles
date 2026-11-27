@@ -277,3 +277,24 @@ bindkey '^x^e' edit-command-line
 # The `export` plugin is what makes JAVA_HOME follow jenv, which Maven needs.
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
+
+# =========================================================
+# FDF (fuzzy finding for termnal)
+# =========================================================
+
+fdf() {
+  local selected
+  selected=$(
+    rg --line-number --no-heading --color=always --smart-case "${*:-}" |
+      fzf --ansi \
+          --delimiter : \
+          --preview 'bat --style=numbers --color=always --highlight-line {2} {1} 2>/dev/null || cat {1}' \
+          --preview-window '+{2}/2'
+  )
+  if [[ -n "$selected" ]]; then
+    local file="${selected%%:*}"
+    local line="${selected#*:}"
+    line="${line%%:*}"
+    ${EDITOR:-nvim} "+${line}" "$file"
+  fi
+}
