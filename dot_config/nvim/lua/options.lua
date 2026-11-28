@@ -10,7 +10,7 @@ o.number = true
 
 o.wrap = false
 
-o.scrolloff = 12
+o.scrolloff = 10
 
 o.guicursor = "n-v-c-sm:block-blinkon0,i-ci-ve:block-blinkwait700-blinkoff400-blinkon250,r-cr-o:hor20-blinkon0"
 

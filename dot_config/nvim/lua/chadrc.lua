@@ -36,7 +36,7 @@ local modes = {
   ["vs"] = { "V-CHAR (Ctrl O)", "Visual" },
   ["V"] = { "V-LINE", "Visual" },
   ["Vs"] = { "V-LINE", "Visual" },
-  [""] = { "V-BLOCK", "Visual" },
+  ["\22"] = { "V-BLOCK", "Visual" },
 
   ["i"] = { "INSERT", "Insert" },
   ["ic"] = { "INSERT", "Insert" },
@@ -115,7 +115,9 @@ M.base46 = {
   },
 }
 
-M.nvdash = {
+
+
+M.nvdash = vim.o.columns > XXL_ZOOM and {
   load_on_startup = true,
   -- header = {
   --   "                                                      ",
@@ -217,6 +219,8 @@ M.nvdash = {
   --   "      ",
   --   "                                                         ",
   -- },
+} or {
+  load_on_startup = false
 }
 
 M.ui = {
@@ -336,7 +340,8 @@ M.ui = {
 
         if num_cols < XXL_ZOOM then
           -- shorten the mode name
-          mode_text = modes[m][1]:sub(1, 1)
+          mode_text = modes[m][1]
+          -- mode_text = modes[m][1]:sub(1, 1)
         else
           mode_text = modes[m][1]
         end
