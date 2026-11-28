@@ -5,6 +5,66 @@
 
 local M = {}
 
+local XXL_ZOOM = 116
+local L_ZOOM = 150
+
+-- separators
+local separator_style = "block"
+local sep_icons = {
+  default = { left = "", right = "" },
+  round = { left = "", right = "" },
+  block = { left = "█", right = "█" },
+  arrow = { left = "", right = "" },
+}
+local separators = sep_icons[separator_style]
+local sep_l = separators["left"]
+local sep_r = separators["right"]
+
+local modes = {
+  ["n"] = { "NORMAL", "Normal" },
+  ["no"] = { "NORMAL (no)", "Normal" },
+  ["nov"] = { "NORMAL (nov)", "Normal" },
+  ["noV"] = { "NORMAL (noV)", "Normal" },
+  ["noCTRL-V"] = { "NORMAL", "Normal" },
+  ["niI"] = { "NORMAL i", "Normal" },
+  ["niR"] = { "NORMAL r", "Normal" },
+  ["niV"] = { "NORMAL v", "Normal" },
+  ["nt"] = { "NTERMINAL", "NTerminal" },
+  ["ntT"] = { "NTERMINAL (ntT)", "NTerminal" },
+
+  ["v"] = { "VISUAL", "Visual" },
+  ["vs"] = { "V-CHAR (Ctrl O)", "Visual" },
+  ["V"] = { "V-LINE", "Visual" },
+  ["Vs"] = { "V-LINE", "Visual" },
+  [""] = { "V-BLOCK", "Visual" },
+
+  ["i"] = { "INSERT", "Insert" },
+  ["ic"] = { "INSERT", "Insert" },
+  ["ix"] = { "INSERT", "Insert" },
+
+  ["t"] = { "TERMINAL", "Terminal" },
+
+  ["R"] = { "REPLACE", "Replace" },
+  ["Rc"] = { "REPLACE (Rc)", "Replace" },
+  ["Rx"] = { "REPLACEa (Rx)", "Replace" },
+  ["Rv"] = { "V-REPLACE", "Replace" },
+  ["Rvc"] = { "V-REPLACE (Rvc)", "Replace" },
+  ["Rvx"] = { "V-REPLACE (Rvx)", "Replace" },
+
+  ["s"] = { "SELECT", "Select" },
+  ["S"] = { "S-LINE", "Select" },
+  [" "] = { "S-BLOCK", "Select" },
+  ["c"] = { "COMMAND", "Command" },
+  ["cv"] = { "COMMAND", "Command" },
+  ["ce"] = { "COMMAND", "Command" },
+  ["cr"] = { "COMMAND", "Command" },
+  ["r"] = { "PROMPT", "Confirm" },
+  ["rm"] = { "MORE", "Confirm" },
+  ["r?"] = { "CONFIRM", "Confirm" },
+  ["x"] = { "CONFIRM", "Confirm" },
+  ["!"] = { "SHELL", "Terminal" },
+}
+
 M.base46 = {
   theme = "everforest",
 
@@ -173,25 +233,38 @@ M.ui = {
   statusline = {
     enabled = true,
     theme = "default",
-    separator_style = "block",
+    separator_style = separator_style,
     order = nil,
     modules = {
       file = function()
         local stbufnr = vim.api.nvim_win_get_buf(vim.g.statusline_winid or 0)
         local path = vim.api.nvim_buf_get_name(stbufnr)
 
+        -- check for an empty buffer
         if path == "" then
           return "%#St_file# 󱓞 %#St_file_sep#"
         end
 
+        -- get path
         local rel_path = vim.fn.fnamemodify(path, ":~:.")
         local parts = vim.split(rel_path, "/")
-
         local processed_parts = {}
 
+        -- shorten long paths
         local max_path_length = 35
-        local keep_depth = 3
         local max_length = 30
+
+        -- get the number of columns
+        local num_cols = vim.o.columns
+
+        local keep_depth = 0
+        if num_cols < XXL_ZOOM then
+          keep_depth = 1
+        elseif num_cols < L_ZOOM then
+          keep_depth = 2
+        else
+          keep_depth = 3
+        end
 
         -- if rel_path longer than 35, then shorten
         if #rel_path > max_path_length then
@@ -222,7 +295,7 @@ M.ui = {
           icon = devicons.get_icon(filename) or icon
         end
 
-        local modified = vim.bo[stbufnr].modified and " " or ""
+        local modified = vim.bo[stbufnr].modified and " (M)" or ""
 
         return string.format("%%#St_file# %s %s%s %%#St_file_sep#", icon, short_path, modified)
       end,
@@ -248,6 +321,29 @@ M.ui = {
         local git_modules = " " .. branch_name .. added .. changed .. removed
 
         return "%#St_gitIcons#" .. git_modules
+      end,
+      mode = function ()
+        local is_activewin = vim.api.nvim_get_current_win() == vim.g.statusline_winid
+
+        if not is_activewin then
+          return ""
+        end
+
+        local m = vim.api.nvim_get_mode().mode
+        local num_cols = vim.o.columns
+
+        local mode_text = ""
+
+        if num_cols < XXL_ZOOM then
+          -- shorten the mode name
+          mode_text = modes[m][1]:sub(1, 1)
+        else
+          mode_text = modes[m][1]
+        end
+
+        local current_mode = "%#St_" .. modes[m][2] .. "Mode#  " .. mode_text
+        local mode_sep1 = "%#St_" .. modes[m][2] .. "ModeSep#" .. sep_r
+        return current_mode .. mode_sep1 .. "%#ST_EmptySpace#" .. sep_l
       end,
     },
   },
